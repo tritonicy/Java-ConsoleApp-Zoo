@@ -3,11 +3,10 @@ import java.util.ArrayList;
 
 public class Hunter extends Animal{
 
-    public Hunter(String sex, int range, List<String> canHunt, Grid grid) {
-        super(sex,range,canHunt,grid);
+    public Hunter(String sex, int range, List<String> canHunt, Grid grid, int killRange) {
+        super(sex,range,canHunt,grid, killRange);
         this.className =  Hunter.class.getName();
         SetAnimalRandomCoordinate(grid, this);
-
     }
 
     @Override
@@ -17,13 +16,11 @@ public class Hunter extends Animal{
         grid.SetAnimal(currentTile, this);
     }
 
-    @Override
-    public void Hunt(String[] canHunt,Grid grid) {
-
-    }
 
     @Override
     public void Breed(Grid grid) {
-
+        return;
     }
+
+
 }

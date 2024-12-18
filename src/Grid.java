@@ -2,28 +2,31 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.awt.geom.Point2D;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Grid {
-    public List<Tile> tileMap;
+    public Map<Integer,Tile> tileMap;
+    public List<Animal> animalList;
+    public List<Animal> copyAnimalList;
+    public int width;
 
 
     public Grid(int x, int y) {
-        tileMap = new ArrayList<>();
+        tileMap = new HashMap<>();
+        animalList = new ArrayList<>();
+        this.width = y;
 
         for (int i = 0; i < y; i++) {
             for (int j = 0; j < x; j++) {
-                tileMap.add(new Tile(j,i,null));
+                tileMap.put((i * y) + j, new Tile(j,i,null));
+//                tileMap.add(new Tile(j,i,null));
             }
         }
     }
 
     public Tile GetTile(int x, int y) {
-    for (Tile tile : tileMap) {
-        if(tile.getX() == x && tile.getY() == y) {
-            return tile;
-        }
-    }
-    return null;
+        return tileMap.get(width * y + x);
     }
 
     public Vector2Int GetBound() {
@@ -43,14 +46,15 @@ public class Grid {
     }
 
     public void PrintGrid() {
-    for(Tile tile: tileMap) {
-        if(tile.getAnimal() == null) {
+    for(int key: tileMap.keySet()) {
+        Tile value = tileMap.get(key);
+        if(value.getAnimal() == null) {
             System.out.print("|");
         }
         else {
-            System.out.print(tile.getAnimal().className);
+            System.out.print(value.getAnimal().className);
         }
-        if(tile.getX() == GetBound().getX()) {
+        if(value.getX() == GetBound().getX()) {
             System.out.println();
         }
     }
@@ -70,6 +74,46 @@ public class Grid {
 
     public void SetTile(Tile tile, Animal animal) {
         tile.setAnimal(animal);
+    }
+
+
+    public void PrintAnimalCount() {
+        Map<String,Integer> dictionary = new HashMap<>();
+        for(int key: tileMap.keySet()) {
+            Tile tile = tileMap.get(key);
+            if(tile.getAnimal() != null) {
+                String animal = tile.getAnimal().className;
+                if(dictionary.containsKey(animal)) {
+                    dictionary.put(animal, dictionary.get(animal) +1);
+                }
+                else{
+                    dictionary.put(animal,1);
+                }
+            }
+        }
+
+        for (Map.Entry<String, Integer> entry : dictionary.entrySet()) {
+            System.out.println("Animal: " + entry.getKey() + ", Count: " + entry.getValue());
+        }
+
+    }
+
+    public List<Animal> CheckForAnimalsInRange(int startX, int startY, int range) {
+        List<Animal> animalsInRange = new ArrayList<>();
+
+        for (int i = startY - range; i < startY + range; i++) {
+            for (int j = startX - range; j < startX + range; j++) {
+                if(!ValidBounds(i,j)) {
+                    continue;
+                }
+                Tile tile = GetTile(i,j);
+                if(tile.getAnimal() != null) {
+//                    System.out.println("Animal eklendi" + range);
+                    animalsInRange.add(tile.getAnimal());
+                }
+            }
+        }
+        return animalsInRange;
     }
 
 

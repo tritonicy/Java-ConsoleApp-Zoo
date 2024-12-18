@@ -8,7 +8,6 @@ public class Tile {
         this.y = y;
         this.animal = animal;
     }
-
     public int getX() {
         return x;
     }
