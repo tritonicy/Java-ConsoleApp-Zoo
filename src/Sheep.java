@@ -2,8 +2,10 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Random;
 
+// Koyun altsinifi
 public class Sheep extends Animal{
 
+    // Bazi ozellikler ture ozel oldugu icin construct islemine burada devam ediyoruz.
     public Sheep(String sex, int range, List<String> canHunt, Grid grid, int killRange) {
         super(sex,range,canHunt,grid, killRange);
         this.className =  Sheep.class.getName();
@@ -11,6 +13,7 @@ public class Sheep extends Animal{
 
     }
 
+    // Her hayvan move edebilir fakat hangi hayvanin move ettigini bilmemiz icin bir override yapmamiz gerekiyor.
     @Override
     public void Move(int range,Grid grid) {
         super.Move(range,grid);
@@ -19,10 +22,10 @@ public class Sheep extends Animal{
     }
 
 
+    // Hayvanin ureme metodu
     @Override
     public void Breed(Grid grid) {
         List<Animal> animalList = grid.CheckForAnimalsInRange(currentTile.getX(), currentTile.getY(), 3);
-//        System.out.println(animalList.size());
         for (Animal animal: animalList) {
             if(animal.className.equals(this.className) && !animal.sex.equals(this.sex)) {
                 Random rand = new Random();
@@ -33,6 +36,4 @@ public class Sheep extends Animal{
             }
         }
     }
-
-
 }
